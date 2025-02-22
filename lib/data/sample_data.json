@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Central",
+    "locations": [
+      {"name": "Kandy", "image": "assets/images/location_images/kandy.png", "description": "A historic city."},
+      {"name": "Nuwara Eliya", "image": "assets/images/location_images/nuwara_eliya.png", "description": "The city of lights."}
+    ]
+  },
+  {
+    "name": "Western",
+    "locations": [
+      {"name": "Colombo", "image": "assets/images/location_images/colombo.png", "description": "The capital city."},
+      {"name": "Negombo", "image": "assets/images/location_images/negombo.png", "description": "A coastal town."}
+    ]
+  }
+]
