@@ -1,0 +1,28 @@
+^C:\USERS\ASUS\DOCUMENTS\Y3S2\ITPM\CEYLON_EXPLORER\BUILD\WINDOWS\X64\CMAKEFILES\DF8306F9F2D42FF622F2EB74F0778F0C\FLUTTER_WINDOWS.DLL.RULE
+setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E env FLUTTER_ROOT=C:\src\flutter\flutter PROJECT_DIR=C:\Users\ASUS\Documents\Y3S2\ITPM\ceylon_explorer FLUTTER_ROOT=C:\src\flutter\flutter FLUTTER_EPHEMERAL_DIR=C:\Users\ASUS\Documents\Y3S2\ITPM\ceylon_explorer\windows\flutter\ephemeral PROJECT_DIR=C:\Users\ASUS\Documents\Y3S2\ITPM\ceylon_explorer FLUTTER_TARGET=C:\Users\ASUS\Documents\Y3S2\ITPM\ceylon_explorer\lib\main.dart DART_OBFUSCATION=false TRACK_WIDGET_CREATION=true TREE_SHAKE_ICONS=false PACKAGE_CONFIG=C:\Users\ASUS\Documents\Y3S2\ITPM\ceylon_explorer\.dart_tool\package_config.json C:/src/flutter/flutter/packages/flutter_tools/bin/tool_backend.bat windows-x64 Debug
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\ASUS\DOCUMENTS\Y3S2\ITPM\CEYLON_EXPLORER\BUILD\WINDOWS\X64\CMAKEFILES\A45DB6B4F05201B7AA9BFB36F9CC9C78\FLUTTER_ASSEMBLE.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\ASUS\DOCUMENTS\Y3S2\ITPM\CEYLON_EXPLORER\WINDOWS\FLUTTER\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/ASUS/Documents/Y3S2/ITPM/ceylon_explorer/windows -BC:/Users/ASUS/Documents/Y3S2/ITPM/ceylon_explorer/build/windows/x64 --check-stamp-file C:/Users/ASUS/Documents/Y3S2/ITPM/ceylon_explorer/build/windows/x64/flutter/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

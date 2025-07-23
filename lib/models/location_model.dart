@@ -1,16 +1,23 @@
-class LocationModel  {
-  final String name;
-  final String image;
-  final String description;
+import 'package:ceylon_explorer/models/province_model.dart';
+import 'package:ceylon_explorer/models/trip_plan_model.dart';
+import 'package:isar/isar.dart';
 
-  LocationModel ({required this.name, required this.image, required this.description});
+part 'location_model.g.dart';
 
-  factory LocationModel.fromJson(Map<String, dynamic> json) {
-    return LocationModel (
-      name: json['name'],
-      image: json['image'],
-      description: json['description'],
-    );
-  }
+@collection
+class Location {
+  Id id = Isar.autoIncrement;
 
+  late String name;
+  late String description;
+  late String image;
+
+  @Index()
+  bool isFavorite = false;
+
+  @Backlink(to: "locations")
+  final province = IsarLink<Province>();
+
+  @Backlink(to: "locations")
+  final tripPlans = IsarLinks<TripPlan>();
 }

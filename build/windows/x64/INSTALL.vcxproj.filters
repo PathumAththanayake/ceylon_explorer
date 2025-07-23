@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\ASUS\Documents\Y3S2\ITPM\ceylon_explorer\build\windows\x64\CMakeFiles\7694a323a9daaca7b1f7c6de3fe58ee5\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{DD057CA7-C049-33F5-93B8-3B1EF6D72765}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

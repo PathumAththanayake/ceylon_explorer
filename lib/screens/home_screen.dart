@@ -1,114 +1,169 @@
-import 'package:flutter/material.dart' show AppBar, AssetImage, BorderRadius, BoxDecoration, BoxFit, BoxShadow, BuildContext, Center, Colors, Column, Container, DecorationImage, EdgeInsets, Expanded, FontWeight, GestureDetector, MaterialPageRoute, Navigator, Offset, PageController, PageView, Scaffold, Shadow, State, StatefulWidget, Text, TextStyle, Transform, Widget;
-import 'province_detail_page.dart';
-import 'province_model.dart';
+import 'package:ceylon_explorer/models/location_model.dart';
+import 'package:ceylon_explorer/models/province_model.dart';
+import 'package:ceylon_explorer/providers/province_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class HomeScreen extends StatefulWidget {
-  final List<ProvinceModel> provinces;
+// Provider to track the index of the currently displayed province
+final currentPageProvider = StateProvider<int>((ref) => 0);
 
-  const HomeScreen({super.key, required this.provinces});
-
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  final PageController _pageController = PageController(viewportFraction: 0.7);
-  double _currentPage = 0.0;
-
-  @override
-  void initState() {
-    super.initState();
-    _pageController.addListener(() {
-      setState(() {
-        _currentPage = _pageController.page!;
-      });
-    });
+// Provider to get the currently selected province object
+final currentProvinceProvider = Provider<Province?>((ref) {
+  final provinces = ref.watch(provinceProvider).asData?.value;
+  final currentIndex = ref.watch(currentPageProvider);
+  if (provinces != null && provinces.isNotEmpty) {
+    return provinces[currentIndex];
   }
+  return null;
+});
+
+// Provider to fetch locations for the current province
+final locationsForProvinceProvider = FutureProvider<List<Location>>((ref) async {
+  final province = ref.watch(currentProvinceProvider);
+  if (province != null) {
+    // IsarLinks are lazy-loaded, so we need to explicitly load them.
+    await province.locations.load();
+    return province.locations.toList();
+  }
+  return [];
+});
+
+
+class HomeScreen extends ConsumerWidget {
+  const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final provincesAsyncValue = ref.watch(provinceProvider);
+    final pageController = PageController();
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ceylon Explore'),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            flex: 3,
-            child: PageView.builder(
-              controller: _pageController,
-              itemCount: widget.provinces.length,
-              itemBuilder: (context, index) {
-                final province = widget.provinces[index];
-                double scale = (_currentPage - index).abs() < 1
-                    ? 1 - (_currentPage - index).abs() * 0.2
-                    : 0.8;
-                return Transform.scale(
-                  scale: scale,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProvinceDetailPage(province: province),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        image: DecorationImage(
-                          image: AssetImage(province.image),
-                          fit: BoxFit.cover,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 10,
-                            offset: Offset(0, 5),
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: Text(
-                          province.name,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            shadows: [
-                              Shadow(
-                                color: Colors.black,
-                                blurRadius: 5,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Center(
-              child: Text(
-                'Swipe vertically to see more about each province',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
-              ),
-            ),
+        title: const Text('Explore Provinces'),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.favorite),
+            onPressed: () {
+              context.go('/favorites');
+            },
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          context.go('/trip');
+        },
+        label: const Text("My Trip"),
+        icon: const Icon(Icons.map),
+      ),
+      body: provincesAsyncValue.when(
+        data: (provinces) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Horizontal PageView for Provinces
+              SizedBox(
+                height: 250,
+                child: PageView.builder(
+                  controller: pageController,
+                  itemCount: provinces.length,
+                  onPageChanged: (index) {
+                    ref.read(currentPageProvider.notifier).state = index;
+                  },
+                  itemBuilder: (context, index) {
+                    final province = provinces[index];
+                    return Card(
+                      margin: const EdgeInsets.all(10),
+                      clipBehavior: Clip.antiAlias,
+                      elevation: 5,
+                      child: Stack(
+                        children: [
+                          Image.asset(
+                            province.image,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                          ),
+                          Container(
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [Colors.black54, Colors.transparent],
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 20,
+                            left: 20,
+                            child: Text(
+                              province.name,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Text(
+                  "Locations",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+              // Vertical ListView for Locations
+              Expanded(
+                child: ref.watch(locationsForProvinceProvider).when(
+                      data: (locations) {
+                        if (locations.isEmpty) {
+                          return const Center(child: Text("No locations found."));
+                        }
+                        return ListView.builder(
+                          itemCount: locations.length,
+                          itemBuilder: (context, index) {
+                            final location = locations[index];
+                            return InkWell(
+                              onTap: () {
+                                context.go('/location/${location.id}');
+                              },
+                              child: ListTile(
+                                leading: Image.asset(
+                                  location.image,
+                                  width: 80,
+                                  fit: BoxFit.cover,
+                                ),
+                                title: Text(location.name),
+                                subtitle: Text(
+                                  location.description,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      loading: () =>
+                          const Center(child: CircularProgressIndicator()),
+                      error: (err, stack) =>
+                          Center(child: Text('Error: $err')),
+                    ),
+              ),
+            ],
+          );
+        },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, stack) => Center(child: Text('Error: $err')),
+      ),
     );
   }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
-}
+} 

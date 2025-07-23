@@ -1,0 +1,13 @@
+C:/Users/ASUS/Documents/Y3S2/ITPM/ceylon_explorer/build/windows/x64/CMakeFiles/INSTALL.dir
+C:/Users/ASUS/Documents/Y3S2/ITPM/ceylon_explorer/build/windows/x64/CMakeFiles/ALL_BUILD.dir
+C:/Users/ASUS/Documents/Y3S2/ITPM/ceylon_explorer/build/windows/x64/CMakeFiles/ZERO_CHECK.dir
+C:/Users/ASUS/Documents/Y3S2/ITPM/ceylon_explorer/build/windows/x64/flutter/CMakeFiles/flutter_wrapper_plugin.dir
+C:/Users/ASUS/Documents/Y3S2/ITPM/ceylon_explorer/build/windows/x64/flutter/CMakeFiles/flutter_wrapper_app.dir
+C:/Users/ASUS/Documents/Y3S2/ITPM/ceylon_explorer/build/windows/x64/flutter/CMakeFiles/flutter_assemble.dir
+C:/Users/ASUS/Documents/Y3S2/ITPM/ceylon_explorer/build/windows/x64/flutter/CMakeFiles/INSTALL.dir
+C:/Users/ASUS/Documents/Y3S2/ITPM/ceylon_explorer/build/windows/x64/runner/CMakeFiles/ceylon_explorer.dir
+C:/Users/ASUS/Documents/Y3S2/ITPM/ceylon_explorer/build/windows/x64/runner/CMakeFiles/INSTALL.dir
+C:/Users/ASUS/Documents/Y3S2/ITPM/ceylon_explorer/build/windows/x64/runner/CMakeFiles/ALL_BUILD.dir
+C:/Users/ASUS/Documents/Y3S2/ITPM/ceylon_explorer/build/windows/x64/plugins/isar_flutter_libs/CMakeFiles/isar_flutter_libs_plugin.dir
+C:/Users/ASUS/Documents/Y3S2/ITPM/ceylon_explorer/build/windows/x64/plugins/isar_flutter_libs/CMakeFiles/INSTALL.dir
+C:/Users/ASUS/Documents/Y3S2/ITPM/ceylon_explorer/build/windows/x64/plugins/isar_flutter_libs/CMakeFiles/ALL_BUILD.dir
