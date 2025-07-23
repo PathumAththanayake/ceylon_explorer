@@ -3,11 +3,17 @@ import 'package:ceylon_explorer/providers/location_provider.dart';
 import 'package:ceylon_explorer/providers/trip_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LocationDetailsScreen extends ConsumerWidget {
   final int locationId;
 
   const LocationDetailsScreen({super.key, required this.locationId});
+
+  Future<bool> _isLoggedIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('isLoggedIn') ?? false;
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -60,7 +66,24 @@ class LocationDetailsScreen extends ConsumerWidget {
                               final isInTrip = tripNotifier.isLocationInCurrentTrip(location);
 
                               return ElevatedButton.icon(
-                                onPressed: () {
+                                onPressed: () async {
+                                  final loggedIn = await _isLoggedIn();
+                                  if (!loggedIn) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: const Text('Login Required'),
+                                        content: const Text('Please login to use this feature.'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.of(context).pop(),
+                                            child: const Text('OK'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                    return;
+                                  }
                                   if (isInTrip) {
                                     tripNotifier.removeLocation(location);
                                   } else {
@@ -85,7 +108,24 @@ class LocationDetailsScreen extends ConsumerWidget {
                             },
                           ),
                           IconButton(
-                            onPressed: () {
+                            onPressed: () async {
+                              final loggedIn = await _isLoggedIn();
+                              if (!loggedIn) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text('Login Required'),
+                                    content: const Text('Please login to use this feature.'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.of(context).pop(),
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                                return;
+                              }
                               ref.read(favoriteActionsProvider).toggleFavorite(location);
                             },
                             icon: Icon(

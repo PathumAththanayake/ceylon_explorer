@@ -2,6 +2,7 @@ import 'package:ceylon_explorer/providers/trip_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TripPlanScreen extends ConsumerWidget {
   const TripPlanScreen({super.key});
@@ -62,7 +63,24 @@ class TripPlanScreen extends ConsumerWidget {
                       ),
                       const SizedBox(width: 10),
                       ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          final loggedIn = await _isLoggedIn(context);
+                          if (!loggedIn) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text('Login Required'),
+                                content: const Text('Please login to use this feature.'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.of(context).pop(),
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              ),
+                            );
+                            return;
+                          }
                           if (nameController.text.isNotEmpty) {
                             tripNotifier.saveTrip(nameController.text);
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -83,5 +101,10 @@ class TripPlanScreen extends ConsumerWidget {
               ],
             ),
     );
+  }
+
+  Future<bool> _isLoggedIn(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('isLoggedIn') ?? false;
   }
 } 
